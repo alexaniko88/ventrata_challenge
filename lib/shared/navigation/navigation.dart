@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ventrata_challenge/di/di.dart';
 import 'package:ventrata_challenge/domain/login/cubits/login_cubit.dart';
+import 'package:ventrata_challenge/domain/products/cubits/product_cubit.dart';
 import 'package:ventrata_challenge/domain/profile/cubits/profile_cubit.dart';
 import 'package:ventrata_challenge/presentation/home/home_page.dart';
 import 'package:ventrata_challenge/presentation/login/login_page.dart';
@@ -43,6 +44,9 @@ class Routes {
             providers: [
               BlocProvider(
                 create: (context) => getIt<ProfileCubit>(),
+              ),
+              BlocProvider(
+                create: (context) => getIt<ProductCubit>(),
               ),
             ],
             child: const HomePage(),

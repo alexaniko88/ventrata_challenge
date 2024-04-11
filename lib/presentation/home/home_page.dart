@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ventrata_challenge/di/di.dart';
+import 'package:ventrata_challenge/domain/products/cubits/product_cubit.dart';
 import 'package:ventrata_challenge/domain/profile/cubits/profile_cubit.dart';
-import 'package:ventrata_challenge/presentation/home/products_view.dart';
-import 'package:ventrata_challenge/presentation/home/profile_view.dart';
+import 'package:ventrata_challenge/presentation/product/products_view.dart';
+import 'package:ventrata_challenge/presentation/profile/profile_view.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -20,10 +20,21 @@ class _HomePageState extends State<HomePage> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      if (_selectedIndex == 0) {
+        context.read<ProductCubit>().fetchProducts();
+        context.read<ProfileCubit>().stopFetching();
+      }
       if (_selectedIndex == 1) {
         context.read<ProfileCubit>().fetchUser();
+        context.read<ProductCubit>().stopFetching();
       }
     });
+  }
+
+  @override
+  void initState() {
+    context.read<ProductCubit>().fetchProducts();
+    super.initState();
   }
 
   @override

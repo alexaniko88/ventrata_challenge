@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:ventrata_challenge/domain/login/entities/login_model.dart';
 
 part 'login_state.freezed.dart';
 

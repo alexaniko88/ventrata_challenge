@@ -14,7 +14,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   Timer? _timer;
 
   Future<void> fetchUser() async {
-    _fetchUserData(); // Call the logic immediately
+    _fetchUserData();
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) async {
       _fetchUserData();
@@ -53,6 +53,8 @@ class ProfileCubit extends Cubit<ProfileState> {
       ),
     );
   }
+
+  void stopFetching() => _timer?.cancel();
 
   @override
   Future<void> close() {

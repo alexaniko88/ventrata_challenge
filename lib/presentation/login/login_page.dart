@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ventrata_challenge/domain/login/cubits/login_cubit.dart';
@@ -33,7 +31,23 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         title: const Text('Login'),
       ),
-      body: BlocBuilder<LoginCubit, LoginState>(
+      body: BlocConsumer<LoginCubit, LoginState>(
+        listener: (context, state) {
+          switch (state.status) {
+            case LoginStatus.success:
+              context.goNamed(RoutePath.home.value);
+              break;
+            case LoginStatus.failure:
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Login failed: ${state.exception}'),
+                ),
+              );
+              break;
+            default:
+              break;
+          }
+        },
         builder: (context, state) {
           return Stack(
             children: [
@@ -50,10 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                     key: _formKey,
                     child: Padding(
                       padding: EdgeInsets.symmetric(
-                        horizontal: MediaQuery
-                            .of(context)
-                            .size
-                            .width * 0.2,
+                        horizontal: MediaQuery.of(context).size.width * 0.2,
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -83,52 +94,22 @@ class _LoginPageState extends State<LoginPage> {
                               return null;
                             },
                           ),
-                          BlocConsumer<LoginCubit, LoginState>(
-                            listener: (context, state) {
-                              switch (state.status) {
-                                case LoginStatus.success:
-                                  context.goNamed(RoutePath.home.value);
-                                  break;
-                                case LoginStatus.failure:
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text('Login failed: ${state.exception}'),
-                                    ),
-                                  );
-                                  break;
-                                default:
-                                  break;
-                              }
-                            },
-                            builder: (context, state) {
-                              final isDisable = switch (state.status) {
-                                LoginStatus.failure || LoginStatus.loading => true,
-                                _ => false,
-                              };
-                              return IgnorePointer(
-                                ignoring: isDisable,
-                                child: Opacity(
-                                  opacity: isDisable ? 0.5 : 1.0,
-                                  child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(top: 30.0),
-                                      child: ElevatedButton(
-                                        onPressed: () {
-                                          if (_formKey.currentState?.validate() ?? false) {
-                                            context.read<LoginCubit>().login(
-                                              username: _usernameController.text,
-                                              password: _passwordController.text,
-                                            );
-                                          }
-                                        },
-                                        child: const Text('Login'),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 30.0),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  if (_formKey.currentState?.validate() ?? false) {
+                                    context.read<LoginCubit>().login(
+                                          username: _usernameController.text,
+                                          password: _passwordController.text,
+                                        );
+                                  }
+                                },
+                                child: const Text('Login'),
+                              ),
+                            ),
                           ),
                         ],
                       ),
