@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:ventrata_challenge/domain/login/entities/login_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ventrata_challenge/di/di.dart';
+import 'package:ventrata_challenge/domain/profile/cubits/profile_cubit.dart';
 import 'package:ventrata_challenge/presentation/home/products_view.dart';
 import 'package:ventrata_challenge/presentation/home/profile_view.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
     super.key,
-    required this.token,
   });
-
-  final String token;
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 1;
+  int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
       if (_selectedIndex == 1) {
-        //TODO do on tapped
+        context.read<ProfileCubit>().fetchUser();
       }
     });
   }
@@ -32,7 +31,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: _selectedIndex == 0 ? const ProductsView() : ProfileView(token: widget.token),
+          child: _selectedIndex == 0 ? const ProductsView() : const ProfileView(),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -43,15 +42,15 @@ class _HomePageState extends State<HomePage> {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
-            label: 'Home',
+            label: 'Products',
             activeIcon: Icon(Icons.home),
-            tooltip: 'Home',
+            tooltip: 'Products',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_outline),
-            label: 'Statistics',
+            label: 'Profile',
             activeIcon: Icon(Icons.person),
-            tooltip: 'Statistics',
+            tooltip: 'Profile',
           ),
         ],
       ),

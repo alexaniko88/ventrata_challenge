@@ -7,7 +7,6 @@ part 'login_state.freezed.dart';
 class LoginState with _$LoginState {
   const factory LoginState({
     required LoginStatus status,
-    LoginModel? loginModel,
     Exception? exception,
   }) = _LoginState;
 }

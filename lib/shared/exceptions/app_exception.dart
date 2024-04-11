@@ -1,6 +1,7 @@
 enum StatusCode {
   noData,
   socketException,
+  unauthorized, // 401
   dioException,
   unknownError,
 }

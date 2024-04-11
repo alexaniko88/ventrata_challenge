@@ -48,6 +48,7 @@ dependencies:
     git:
       url: https://github.com/alexaniko88/basic_flutter_helper.git
       ref: master
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:

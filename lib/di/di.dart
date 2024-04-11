@@ -9,5 +9,6 @@ final getIt = GetIt.instance;
   initializerName: 'init',
   preferRelativeImports: true,
   asExtension: true,
+
 )
 void configureDependencies() => getIt.init();

@@ -9,7 +9,13 @@ abstract class UserRepository {
     required String password,
   });
 
-  Future<Result<UserModel, AppException>> refreshUser({
+  Future<Result<UserModel, AppException>> fetchUser({
     required String token,
   });
+
+  Future<Result<bool, AppException>> saveToken({
+    required String token,
+  });
+
+  Future<Result<String, AppException>> getToken();
 }

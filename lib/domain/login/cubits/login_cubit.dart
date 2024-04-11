@@ -9,6 +9,21 @@ class LoginCubit extends Cubit<LoginState> {
 
   final UserRepository repository;
 
+  Future<void> tryAutoLogin() async {
+    emit(const LoginState(status: LoginStatus.loading));
+    final tokenResult = await repository.getToken();
+    tokenResult.fold(
+      (token) async {
+        final userResult = await repository.fetchUser(token: token);
+        userResult.fold(
+          (user) => emit(const LoginState(status: LoginStatus.success)),
+          (exception) => emit(const LoginState(status: LoginStatus.initial)),
+        );
+      },
+      (exception) => emit(const LoginState(status: LoginStatus.initial)),
+    );
+  }
+
   Future<void> login({
     required String username,
     required String password,
@@ -19,12 +34,19 @@ class LoginCubit extends Cubit<LoginState> {
       password: password,
     );
     result.fold(
-      (loginModel) => emit(
-        LoginState(
-          status: LoginStatus.success,
-          loginModel: loginModel,
-        ),
-      ),
+      (loginModel) async {
+        final token = loginModel.token;
+        final tokenResult = await repository.saveToken(token: token);
+        tokenResult.fold(
+          (response) => emit(const LoginState(status: LoginStatus.success)),
+          (exception) => emit(
+            LoginState(
+              status: LoginStatus.failure,
+              exception: exception,
+            ),
+          ),
+        );
+      },
       (exception) => emit(
         LoginState(
           status: LoginStatus.failure,
