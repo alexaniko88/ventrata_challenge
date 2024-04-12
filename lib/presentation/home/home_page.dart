@@ -4,6 +4,7 @@ import 'package:ventrata_challenge/domain/products/cubits/product_cubit.dart';
 import 'package:ventrata_challenge/domain/profile/cubits/profile_cubit.dart';
 import 'package:ventrata_challenge/presentation/home/products_view.dart';
 import 'package:ventrata_challenge/presentation/home/profile_view.dart';
+import 'package:ventrata_challenge/presentation/home/sale_view.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -21,10 +22,15 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _selectedIndex = index;
       if (_selectedIndex == 0) {
+        context.read<ProductCubit>().stopFetching();
+        context.read<ProfileCubit>().stopFetching();
+        context.read<ProductCubit>().getProducts();
+      }
+      if (_selectedIndex == 1) {
         context.read<ProductCubit>().fetchProducts();
         context.read<ProfileCubit>().stopFetching();
       }
-      if (_selectedIndex == 1) {
+      if (_selectedIndex == 2) {
         context.read<ProfileCubit>().fetchUser();
         context.read<ProductCubit>().stopFetching();
       }
@@ -33,7 +39,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    context.read<ProductCubit>().fetchProducts();
+    context.read<ProductCubit>().getProducts();
     super.initState();
   }
 
@@ -42,7 +48,11 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: _selectedIndex == 0 ? const ProductsView() : const ProfileView(),
+          child: _selectedIndex == 0
+              ? const SaleView()
+              : _selectedIndex == 1
+                  ? const ProductsView()
+                  : const ProfileView(),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -51,6 +61,12 @@ class _HomePageState extends State<HomePage> {
         onTap: _onItemTapped,
         unselectedItemColor: Colors.black,
         items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shop_outlined),
+            label: 'Sale',
+            activeIcon: Icon(Icons.shop),
+            tooltip: 'Sale',
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
             label: 'Products',

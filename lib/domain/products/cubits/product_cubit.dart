@@ -31,6 +31,8 @@ class ProductCubit extends Cubit<ProductState> {
     });
   }
 
+  Future<void> getProducts() => _fetchProducts();
+
   void updateProductAmount({
     required int id,
     required int newAmount,
@@ -46,6 +48,19 @@ class ProductCubit extends Cubit<ProductState> {
           ),
         );
       }
+  }
+
+  void resetAllAmounts() {
+    final updatedProducts = List<ProductModel>.from(state.products);
+    for (var i = 0; i < updatedProducts.length; i++) {
+      updatedProducts[i] = updatedProducts[i].copyWith(amount: 0);
+    }
+    emit(
+      ProductState(
+        status: ProductStatus.success,
+        products: updatedProducts,
+      ),
+    );
   }
 
   Future<void> _fetchProducts() async {
