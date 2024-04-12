@@ -1,8 +1,5 @@
 # Ventrata Challenge
 
-
-# Authentication Flow
-
 1. **Authentication Flow:**
    - Implement a simple authentication flow with a login page (no registration page needed).
    - Authenticate via a free API - e.g., [DummyJSON](https://dummyjson.com/docs/auth) (or other if you prefer) - and store the auth token for later.
