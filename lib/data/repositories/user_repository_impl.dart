@@ -62,4 +62,13 @@ class UserRepositoryImpl implements UserRepository {
       (exception) => Result.failure(exception),
     );
   }
+
+  @override
+  Future<Result<bool, AppException>> deleteToken() async {
+    final result = await localDatasource.deleteToken();
+    return result.fold(
+      (response) => Result.success(response),
+      (exception) => Result.failure(exception),
+    );
+  }
 }

@@ -55,4 +55,18 @@ class LoginCubit extends Cubit<LoginState> {
       ),
     );
   }
+
+  //logout
+  Future<void> logout() async {
+    final result = await repository.deleteToken();
+    result.fold(
+      (response) => emit(const LoginState(status: LoginStatus.logout)),
+      (exception) => emit(
+        LoginState(
+          status: LoginStatus.failure,
+          exception: exception,
+        ),
+      ),
+    );
+  }
 }

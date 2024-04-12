@@ -18,4 +18,6 @@ abstract class UserRepository {
   });
 
   Future<Result<String, AppException>> getToken();
+
+  Future<Result<bool, AppException>> deleteToken();
 }

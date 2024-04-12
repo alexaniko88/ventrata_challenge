@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+import 'package:ventrata_challenge/domain/login/cubits/login_cubit.dart';
 import 'package:ventrata_challenge/domain/products/cubits/product_cubit.dart';
 import 'package:ventrata_challenge/domain/products/cubits/product_state.dart';
 import 'package:ventrata_challenge/presentation/sale/payment_page.dart';
 import 'package:ventrata_challenge/shared/extensions/product_list_extensions.dart';
 import 'package:ventrata_challenge/shared/mixins/details_handler_mixin.dart';
-import 'package:ventrata_challenge/shared/navigation/navigation.dart';
 
 class SaleView extends StatelessWidget with DetailsHandlerMixin {
   const SaleView({super.key});
@@ -22,7 +21,7 @@ class SaleView extends StatelessWidget with DetailsHandlerMixin {
           BlocConsumer<ProductCubit, ProductState>(
             listener: (context, state) {
               if (state.status == ProductStatus.unauthorized) {
-                context.goNamed(RoutePath.login.value);
+                context.read<LoginCubit>().logout();
               }
             },
             builder: (context, state) {

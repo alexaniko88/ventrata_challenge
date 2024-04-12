@@ -43,6 +43,9 @@ class Routes {
           child: MultiBlocProvider(
             providers: [
               BlocProvider(
+                create: (context) => getIt<LoginCubit>(),
+              ),
+              BlocProvider(
                 create: (context) => getIt<ProfileCubit>(),
               ),
               BlocProvider(

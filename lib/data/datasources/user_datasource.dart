@@ -23,6 +23,8 @@ abstract class UserLocalDatasource {
   });
 
   Future<Result<String, AppException>> getToken();
+
+  Future<Result<bool, AppException>> deleteToken();
 }
 
 @LazySingleton(as: UserRemoteDatasource)
@@ -126,6 +128,23 @@ class UserLocalDatasourceImpl extends UserLocalDatasource {
       return Result.failure(
         AppException(
           identifier: 'saveToken',
+          statusCode: StatusCode.unknownError,
+          message: e.toString(),
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Result<bool, AppException>> deleteToken() async {
+    try {
+      final sharedPreferences = await SharedPreferences.getInstance();
+      final result = await sharedPreferences.remove('token');
+      return Result.success(result);
+    } catch (e) {
+      return Result.failure(
+        AppException(
+          identifier: 'deleteToken',
           statusCode: StatusCode.unknownError,
           message: e.toString(),
         ),

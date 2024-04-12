@@ -14,5 +14,6 @@ enum LoginStatus {
   initial,
   loading,
   success,
+  logout,
   failure,
 }
